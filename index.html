@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Daily Plate</title>
+<meta name="theme-color" content="#1B2B22">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Daily Plate">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ===================== ONBOARDING ===================== -->
+  <div class="screen" id="screen-welcome">
+    <div class="welcome">
+      <h1>Daily Plate</h1>
+      <p>A quiet, personal journal for what you eat. Set up your profile to get calorie &amp; protein targets built just for you.</p>
+      <button class="btn ember" onclick="goTo('screen-setup')">Set up my profile</button>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-setup">
+    <div class="topbar"><div><div class="eyebrow">Step 1 of 1</div><h1>About you</h1></div></div>
+    <div class="card">
+      <label>Name</label>
+      <input id="su-name" placeholder="Your name">
+      <div class="row2">
+        <div><label>Age</label><input id="su-age" type="number" placeholder="28"></div>
+        <div><label>Sex</label>
+          <select id="su-sex"><option value="male">Male</option><option value="female">Female</option></select>
+        </div>
+      </div>
+      <div class="row2">
+        <div><label>Height (cm)</label><input id="su-height" type="number" placeholder="175"></div>
+        <div><label>Weight (kg)</label><input id="su-weight" type="number" placeholder="72"></div>
+      </div>
+      <label>Activity level</label>
+      <select id="su-activity">
+        <option value="1.2">Sedentary (little/no exercise)</option>
+        <option value="1.375">Light (1-3 days/week)</option>
+        <option value="1.55" selected>Moderate (3-5 days/week)</option>
+        <option value="1.725">Active (6-7 days/week)</option>
+        <option value="1.9">Very active (physical job/2x training)</option>
+      </select>
+      <label>Goal</label>
+      <select id="su-goal">
+        <option value="lose">Lose weight</option>
+        <option value="maintain" selected>Maintain weight</option>
+        <option value="gain">Gain weight / muscle</option>
+      </select>
+      <label>Daily protein target (g) — leave default or customize</label>
+      <input id="su-protein" type="number" placeholder="auto-calculated">
+    </div>
+    <button class="btn ember" onclick="completeSetup()">Save profile &amp; start tracking</button>
+  </div>
+
+  <!-- HOME -->
+  <div class="screen" id="screen-home"><div class="topbar"><div><div class="eyebrow" id="home-date">OVERVIEW</div><h1>Home</h1></div><span class="version-badge">v1.2</span></div><div id="home-dashboard"></div></div>
+  <!-- ===================== TODAY ===================== -->
+  <div class="screen" id="screen-today">
+    <div class="topbar">
+      <div>
+        <div class="eyebrow" id="today-date">TODAY</div>
+        <h1 id="today-greeting">Hello</h1>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.5;text-align:right" id="today-clock"></div>
+    </div>
+
+    <div class="card">
+      <div class="plate-wrap">
+        <div class="plate-ring">
+          <svg viewBox="0 0 220 220">
+            <circle cx="110" cy="110" r="96" stroke="#1B2B221a" stroke-width="14"/>
+            <circle cx="110" cy="110" r="96" stroke="#E8643A" stroke-width="14" id="ring-progress" stroke-dasharray="603" stroke-dashoffset="603"/>
+          </svg>
+          <div class="plate-center">
+            <div class="eaten-lbl">EATEN</div>
+            <div class="num eaten-num" id="cal-eaten-sub">0</div>
+            <div class="eaten-unit">kcal</div>
+            <div class="remaining-sub" id="cal-remaining-sub">0 remaining</div>
+            <div class="sub" id="cal-target-sub">of 2000 target</div>
+          </div>
+        </div>
+        <div class="macro-row">
+          <div class="macro-pill protein"><div class="v" id="pv-protein">0g</div><div class="k">Protein</div><div class="bar"><i id="pb-protein" style="width:0%"></i></div><div class="pill-target" id="pt-protein"></div></div>
+          <div class="macro-pill carb"><div class="v" id="pv-carb">0g</div><div class="k">Carbs</div><div class="bar"><i id="pb-carb" style="width:0%"></i></div><div class="pill-target" id="pt-carb"></div></div>
+          <div class="macro-pill fat"><div class="v" id="pv-fat">0g</div><div class="k">Fat</div><div class="bar"><i id="pb-fat" style="width:0%"></i></div><div class="pill-target" id="pt-fat"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Today's meals</div>
+    <div id="meals-container"></div>
+  </div>
+
+  <!-- ===================== LOG / HISTORY ===================== -->
+  <div class="screen" id="screen-log">
+    <div class="topbar"><div><div class="eyebrow">History</div><h1>Your log</h1></div></div>
+    <div class="day-strip" id="day-strip"></div>
+    <div class="card date-selector-card"><h3>Select a date</h3><input id="log-date-picker" type="date" onchange="v12PickDate(this.value)"><p class="helper">Choose any past date, today, or tomorrow.</p></div>
+    <div class="log-day-header">
+      <div class="section-title" id="log-day-title" style="margin:0;">Day detail</div>
+      <button class="log-edit-btn" id="log-edit-btn" onclick="toggleLogEdit()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Edit day
+      </button>
+    </div>
+    <div id="log-day-detail"></div>
+  </div>
+
+  <!-- ===================== INGREDIENTS ===================== -->
+  <div class="screen" id="screen-ingredients">
+    <div class="topbar">
+      <div><div class="eyebrow">Database</div><h1>Ingredients</h1></div>
+      <button class="add-btn" onclick="openIngredientEditor(null)">+</button>
+    </div>
+    <div class="card" style="padding:10px 14px;">
+      <input id="ing-search" placeholder="Search ingredients…" oninput="renderIngredientLibrary()">
+    </div>
+    <div class="search-results" id="ingredient-library" style="max-height:none;"></div>
+  </div>
+
+  <!-- ===================== PROFILE ===================== -->
+  <div class="screen" id="screen-profile">
+    <div class="topbar"><div><div class="eyebrow">You</div><h1 id="profile-name">Profile</h1></div></div>
+    <div class="card">
+      <div class="stat-grid">
+        <div class="stat-box"><div class="v" id="pf-bmi">--</div><div class="k">BMI</div></div>
+        <div class="stat-box"><div class="v" id="pf-bmr">--</div><div class="k">BMR (kcal)</div></div>
+        <div class="stat-box"><div class="v" id="pf-tdee">--</div><div class="k">Maintenance</div></div>
+        <div class="stat-box"><div class="v" id="pf-target">--</div><div class="k">Daily target</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Edit details</h3>
+      <label>Name</label><input id="pf-edit-name">
+      <div class="row2">
+        <div><label>Age</label><input id="pf-edit-age" type="number"></div>
+        <div><label>Sex</label><select id="pf-edit-sex"><option value="male">Male</option><option value="female">Female</option></select></div>
+      </div>
+      <div class="row2">
+        <div><label>Height (cm)</label><input id="pf-edit-height" type="number"></div>
+        <div><label>Weight (kg)</label><input id="pf-edit-weight" type="number"></div>
+      </div>
+      <label>Activity level</label>
+      <select id="pf-edit-activity">
+        <option value="1.2">Sedentary</option><option value="1.375">Light</option>
+        <option value="1.55">Moderate</option><option value="1.725">Active</option><option value="1.9">Very active</option>
+      </select>
+      <label>Goal</label>
+      <select id="pf-edit-goal"><option value="lose">Lose weight</option><option value="maintain">Maintain</option><option value="gain">Gain weight / muscle</option></select>
+      <label>Custom calorie target (optional — overrides auto)</label>
+      <input id="pf-edit-caltarget" type="number" placeholder="auto">
+      <label>Daily protein target (g)</label>
+      <input id="pf-edit-protein" type="number">
+      <button class="btn ember" style="margin-top:16px" onclick="saveProfileEdits()">Save changes</button>
+    </div>
+    <div class="card">
+      <h3>Data</h3>
+      <p style="font-size:12.5px;opacity:.6;margin:0 0 12px;">Everything is stored only on this device. Nothing is uploaded anywhere.</p>
+      <div style="display:flex;gap:10px;">
+        <button class="btn ghost" style="flex:1" onclick="exportData()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export
+        </button>
+        <button class="btn ghost" style="flex:1" onclick="document.getElementById('import-file-input').click()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Import
+        </button>
+      </div>
+      <input type="file" id="import-file-input" accept=".json" style="display:none" onchange="importData(event)">
+    </div>
+  </div>
+
+  <!-- ===================== TAB BAR ===================== -->
+  <div class="tabbar" id="tabbar" style="display:none;">
+    <div class="tabbar-inner">
+      <button class="tab active" data-tab="screen-home" onclick="switchTab('screen-home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v11h14V10"/><path d="M9 21v-7h6v7"/></svg>Home</button>
+      <button class="tab" data-tab="screen-today" onclick="switchTab('screen-today')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        Today
+      </button>
+      <button class="tab" data-tab="screen-log" onclick="switchTab('screen-log')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h10"/></svg>
+        Log
+      </button>
+      <button class="tab" data-tab="screen-ingredients" onclick="switchTab('screen-ingredients')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3v18M5 3c4 0 4 3 4 5s0 5-4 5M19 3v18"/></svg>
+        Ingredients
+      </button>
+      <button class="tab" data-tab="screen-profile" onclick="switchTab('screen-profile')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>
+        Profile
+      </button>
+    </div>
+  </div>
+
+  <!-- ===================== ADD-TO-MEAL SHEET ===================== -->
+  <div class="sheet-backdrop" id="sheet-add">
+    <div class="sheet" style="position:relative;">
+      <div class="sheet-handle"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div class="sheet-title" style="margin:0" id="add-sheet-title">Add to meal</div>
+        <button class="sheet-close-inline" onclick="closeSheet('sheet-add')">✕</button>
+      </div>
+
+      <!-- Frequent items (hidden while typing) -->
+      <div id="freq-section">
+        <div class="freq-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          Your usuals
+        </div>
+        <div class="freq-list" id="freq-list"></div>
+      </div>
+
+      <div class="freq-divider" id="freq-divider">All ingredients</div>
+      <input id="add-search" placeholder="Search…" oninput="renderAddSearch()">
+      <div class="search-results" id="add-search-results"></div>
+    </div>
+  </div>
+
+  <!-- ===================== QUANTITY SHEET ===================== -->
+  <div class="sheet-backdrop" id="sheet-qty">
+    <div class="sheet" style="position:relative;">
+      <div class="sheet-handle"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+        <div class="sheet-title" style="margin:0" id="qty-ing-name">Ingredient</div>
+        <button class="sheet-close-inline" onclick="closeSheet('sheet-qty')">✕</button>
+      </div>
+
+      <!-- COUNT mode — only for ingredients with a named unit (eggs, bananas etc) -->
+      <div id="qty-count-mode" style="display:none;">
+        <div class="counter-wrap">
+          <button class="counter-btn" onclick="changeCount(-1)">−</button>
+          <div class="counter-display">
+            <span class="counter-num" id="qty-count-num">1</span>
+            <span class="counter-unit" id="qty-count-unit">egg</span>
+          </div>
+          <button class="counter-btn" onclick="changeCount(1)">+</button>
+        </div>
+        <div class="counter-grams-hint" id="qty-count-grams-hint">= 50g</div>
+        <button class="switch-mode-btn" onclick="switchQtyMode('grams')">Enter grams instead →</button>
+      </div>
+
+      <!-- GRAMS mode — all ingredients incl. non-countable ones, with +/- and editable field -->
+      <div id="qty-gram-mode">
+        <div class="counter-wrap">
+          <button class="counter-btn" onclick="changeGrams(-1)">−</button>
+          <div class="counter-display">
+            <input id="qty-grams" class="gram-counter-input" type="number" value="100" inputmode="decimal" oninput="updateQtyPreview()">
+            <span class="counter-unit" id="qty-gram-unit">g</span>
+          </div>
+          <button class="counter-btn" onclick="changeGrams(1)">+</button>
+        </div>
+        <div id="qty-gram-switch-wrap"></div>
+      </div>
+
+      <div class="card" style="margin-top:14px;">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="v" id="qp-cal">0</div><div class="k">Calories</div></div>
+          <div class="stat-box"><div class="v" id="qp-protein">0g</div><div class="k">Protein</div></div>
+          <div class="stat-box"><div class="v" id="qp-carb">0g</div><div class="k">Carbs</div></div>
+          <div class="stat-box"><div class="v" id="qp-fat">0g</div><div class="k">Fat</div></div>
+        </div>
+      </div>
+      <button class="btn ember" style="margin-top:16px" onclick="confirmAddEntry()">Add to meal</button>
+    </div>
+  </div>
+
+  <!-- ===================== INGREDIENT EDITOR SHEET ===================== -->
+  <div class="sheet-backdrop" id="sheet-ing-edit">
+    <div class="sheet" style="position:relative;">
+      <div class="sheet-handle"></div>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2px;">
+        <div>
+          <div class="sheet-title" id="ie-title">New ingredient</div>
+          <p style="font-size:12px;opacity:.55;margin:2px 0 0;">Nutritional values per 100g</p>
+        </div>
+        <button class="sheet-close-inline" onclick="closeSheet('sheet-ing-edit')">✕</button>
+      </div>
+      <label>Name</label><input id="ie-name">
+      <label>Category</label><input id="ie-cat" placeholder="e.g. Vegetables">
+      <div class="row2">
+        <div><label>Calories</label><input id="ie-cal" type="number"></div>
+        <div><label>Protein (g)</label><input id="ie-protein" type="number"></div>
+      </div>
+      <div class="row2">
+        <div><label>Carbs (g)</label><input id="ie-carb" type="number"></div>
+        <div><label>Fat (g)</label><input id="ie-fat" type="number"></div>
+      </div>
+      <div class="row2">
+        <div><label>Sugar (g)</label><input id="ie-sugar" type="number"></div>
+        <div><label>Fiber (g)</label><input id="ie-fiber" type="number"></div>
+      </div>
+      <label>Sodium (mg)</label><input id="ie-sodium" type="number">
+      <div class="default-serving-row">
+        <div>
+          <div style="font-size:12px;font-weight:600;opacity:.65;">Default serving size</div>
+          <div style="font-size:11px;opacity:.4;margin-top:2px;" id="ie-serving-unit-hint">Pre-fills when you add this to a meal</div>
+        </div>
+        <input id="ie-default-serving" type="number" class="serving-inline-input" value="100" min="1">
+      </div>
+      <div class="liquid-toggle-row" onclick="toggleIsLiquid()">
+        <div>
+          <div style="font-size:13px;font-weight:600;">Liquid / drink</div>
+          <div style="font-size:11px;opacity:.5;margin-top:2px;">Uses ml instead of g, oils & drinks</div>
+        </div>
+        <div class="toggle-pill" id="ie-liquid-toggle">
+          <div class="toggle-knob"></div>
+        </div>
+      </div>
+      <div style="display:flex; gap:10px; margin-top:16px;">
+        <button class="btn ember" onclick="saveIngredientEditor()">Save</button>
+        <button class="btn ghost" id="ie-delete-btn" style="display:none;" onclick="deleteIngredientEditor()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sheet-backdrop" id="sheet-v12-meal"><div class="sheet"><div class="sheet-handle"></div><div class="sheet-title">Add to meal</div><select id="v12-meal"><option value="breakfast">Breakfast</option><option value="lunch">Lunch</option><option value="dinner">Dinner</option><option value="snacks">Snacks</option></select><button class="btn ember top-gap" onclick="v12QuickContinue()">Continue</button><button class="btn ghost top-gap" onclick="closeSheet('sheet-v12-meal')">Cancel</button></div></div>
+  <div class="sheet-backdrop" id="sheet-v12-edit"><div class="sheet"><div class="sheet-handle"></div><div class="sheet-title" id="v12-edit-name">Edit entry</div><label>Quantity (g/ml)</label><input id="v12-amount" type="number" oninput="v12Preview()"><div id="v12-count-wrap" style="display:none"><label>Count</label><input id="v12-count" type="number" min="1" step="1" oninput="v12Count()"></div><p id="v12-summary" class="helper"></p><button class="btn ember" onclick="v12SaveEntry()">Save changes</button><button class="btn ghost danger top-gap" onclick="v12DeleteEntry()">Delete</button><button class="btn ghost top-gap" onclick="closeSheet('sheet-v12-edit')">Cancel</button></div></div>
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="ingredients.js"></script>
+<script src="app.js"></script>
+<script src="enhancements.js"></script>
+<script src="v12.js"></script>
+</body>
+</html>
