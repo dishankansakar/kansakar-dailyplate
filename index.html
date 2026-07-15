@@ -59,10 +59,15 @@
     <button class="btn ember" onclick="completeSetup()">Save profile &amp; start tracking</button>
   </div>
 
-  <!-- HOME -->
-  <div class="screen" id="screen-home"><div class="topbar"><div><div class="eyebrow" id="home-date">OVERVIEW</div><h1>Home</h1></div><span class="version-badge">v1.2</span></div><div id="home-dashboard"></div></div>
+  <!-- ===================== HOME ===================== -->
+  <div class="screen" id="screen-home">
+    <div class="page-brand-row"><h1 class="page-brand">Daily Plate</h1></div>
+    <div class="home-greeting" id="home-greeting">Hello</div>
+    <div id="home-dashboard"></div>
+  </div>
   <!-- ===================== TODAY ===================== -->
   <div class="screen" id="screen-today">
+    <div class="page-brand-row"><h1 class="page-brand">Daily Plate</h1></div>
     <div class="topbar">
       <div>
         <div class="eyebrow" id="today-date">TODAY</div>
@@ -100,9 +105,14 @@
 
   <!-- ===================== LOG / HISTORY ===================== -->
   <div class="screen" id="screen-log">
+    <div class="page-brand-row"><h1 class="page-brand">Daily Plate</h1></div>
     <div class="topbar"><div><div class="eyebrow">History</div><h1>Your log</h1></div></div>
     <div class="day-strip" id="day-strip"></div>
-    <div class="card date-selector-card"><h3>Select a date</h3><input id="log-date-picker" type="date" onchange="v12PickDate(this.value)"><p class="helper">Choose any past date, today, or tomorrow.</p></div>
+    <div class="card date-selector-card">
+      <h3>Select a date</h3>
+      <input id="log-date-picker" type="date" onchange="v13SelectDate(this.value)">
+      <p class="helper">Choose any past date, today, or tomorrow.</p>
+    </div>
     <div class="log-day-header">
       <div class="section-title" id="log-day-title" style="margin:0;">Day detail</div>
       <button class="log-edit-btn" id="log-edit-btn" onclick="toggleLogEdit()">
@@ -115,6 +125,7 @@
 
   <!-- ===================== INGREDIENTS ===================== -->
   <div class="screen" id="screen-ingredients">
+    <div class="page-brand-row"><h1 class="page-brand">Daily Plate</h1><button class="add-btn page-add-btn" onclick="openIngredientEditor(null)" aria-label="Add ingredient">+</button></div>
     <div class="topbar">
       <div><div class="eyebrow">Database</div><h1>Ingredients</h1></div>
       <button class="add-btn" onclick="openIngredientEditor(null)">+</button>
@@ -127,6 +138,7 @@
 
   <!-- ===================== PROFILE ===================== -->
   <div class="screen" id="screen-profile">
+    <div class="page-brand-row"><h1 class="page-brand">Daily Plate</h1></div>
     <div class="topbar"><div><div class="eyebrow">You</div><h1 id="profile-name">Profile</h1></div></div>
     <div class="card">
       <div class="stat-grid">
@@ -180,7 +192,10 @@
   <!-- ===================== TAB BAR ===================== -->
   <div class="tabbar" id="tabbar" style="display:none;">
     <div class="tabbar-inner">
-      <button class="tab active" data-tab="screen-home" onclick="switchTab('screen-home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v11h14V10"/><path d="M9 21v-7h6v7"/></svg>Home</button>
+      <button class="tab active" data-tab="screen-home" onclick="switchTab('screen-home')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v11h14V10"/><path d="M9 21v-7h6v7"/></svg>
+        Home
+      </button>
       <button class="tab" data-tab="screen-today" onclick="switchTab('screen-today')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
         Today
@@ -260,6 +275,15 @@
         <div id="qty-gram-switch-wrap"></div>
       </div>
 
+      <div class="energy-entry-card">
+        <div class="energy-entry-title">Energy for this serving <span>optional override</span></div>
+        <div class="row2">
+          <div><label>Calories (kcal)</label><input id="qty-energy-kcal" type="number" inputmode="decimal" oninput="v15SyncMealEnergy('kcal')"></div>
+          <div><label>Energy (kJ)</label><input id="qty-energy-kj" type="number" inputmode="decimal" oninput="v15SyncMealEnergy('kj')"></div>
+        </div>
+        <p class="helper">Enter either value. The other is converted automatically.</p>
+      </div>
+
       <div class="card" style="margin-top:14px;">
         <div class="stat-grid">
           <div class="stat-box"><div class="v" id="qp-cal">0</div><div class="k">Calories</div></div>
@@ -285,10 +309,11 @@
       </div>
       <label>Name</label><input id="ie-name">
       <label>Category</label><input id="ie-cat" placeholder="e.g. Vegetables">
-      <div class="row2">
-        <div><label>Calories</label><input id="ie-cal" type="number"></div>
-        <div><label>Protein (g)</label><input id="ie-protein" type="number"></div>
+      <div class="row2 energy-editor-row">
+        <div><label>Calories (kcal)</label><input id="ie-cal" type="number" inputmode="decimal" oninput="v15SyncIngredientEnergy('kcal')"></div>
+        <div><label>Energy (kJ, optional)</label><input id="ie-kj" type="number" inputmode="decimal" oninput="v15SyncIngredientEnergy('kj')"></div>
       </div>
+      <label>Protein (g)</label><input id="ie-protein" type="number">
       <div class="row2">
         <div><label>Carbs (g)</label><input id="ie-carb" type="number"></div>
         <div><label>Fat (g)</label><input id="ie-fat" type="number"></div>
@@ -321,14 +346,16 @@
     </div>
   </div>
 
-  <div class="sheet-backdrop" id="sheet-v12-meal"><div class="sheet"><div class="sheet-handle"></div><div class="sheet-title">Add to meal</div><select id="v12-meal"><option value="breakfast">Breakfast</option><option value="lunch">Lunch</option><option value="dinner">Dinner</option><option value="snacks">Snacks</option></select><button class="btn ember top-gap" onclick="v12QuickContinue()">Continue</button><button class="btn ghost top-gap" onclick="closeSheet('sheet-v12-meal')">Cancel</button></div></div>
-  <div class="sheet-backdrop" id="sheet-v12-edit"><div class="sheet"><div class="sheet-handle"></div><div class="sheet-title" id="v12-edit-name">Edit entry</div><label>Quantity (g/ml)</label><input id="v12-amount" type="number" oninput="v12Preview()"><div id="v12-count-wrap" style="display:none"><label>Count</label><input id="v12-count" type="number" min="1" step="1" oninput="v12Count()"></div><p id="v12-summary" class="helper"></p><button class="btn ember" onclick="v12SaveEntry()">Save changes</button><button class="btn ghost danger top-gap" onclick="v12DeleteEntry()">Delete</button><button class="btn ghost top-gap" onclick="closeSheet('sheet-v12-edit')">Cancel</button></div></div>
+  <div class="sheet-backdrop" id="sheet-v13-meal"><div class="sheet"><div class="sheet-handle"></div><div class="sheet-title">Add to meal</div><label>Meal</label><select id="v13-meal"><option value="breakfast">Breakfast</option><option value="lunch">Lunch</option><option value="dinner">Dinner</option><option value="snacks">Snacks</option></select><button class="btn ember top-gap" onclick="v13QuickContinue()">Continue</button><button class="btn ghost top-gap" onclick="closeSheet('sheet-v13-meal')">Cancel</button></div></div>
+  <div class="sheet-backdrop" id="sheet-v14-edit"><div class="sheet edit-sheet-v14"><div class="edit-sheet-head"><div class="sheet-title" id="v14-edit-name">Edit entry</div><button class="sheet-close-inline edit-close" onclick="closeSheet('sheet-v14-edit')" aria-label="Close">✕</button></div><label>Quantity (g/ml)</label><input id="v14-amount" type="number" inputmode="decimal" oninput="v14Preview()"><div id="v14-count-wrap" style="display:none"><label>Count</label><input id="v14-count" type="number" min="1" step="1" oninput="v14CountChanged()"></div><p id="v14-summary" class="helper"></p><button class="btn ember" onclick="v14SaveEntry()">Save Changes</button></div></div>
   <div class="toast" id="toast"></div>
 </div>
 
 <script src="ingredients.js"></script>
 <script src="app.js"></script>
 <script src="enhancements.js"></script>
-<script src="v12.js"></script>
+<script src="v13.js"></script>
+<script src="v14.js"></script>
+<script src="v15.js"></script>
 </body>
 </html>

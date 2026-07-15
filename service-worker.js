@@ -1,7 +1,7 @@
 // ── Daily Plate Service Worker ──────────────────────────────────────────────
 // CACHE_VERSION is updated on every build so the browser installs fresh SW.
 // Strategy: network-first (always get latest when online, cache as fallback).
-const CACHE_VERSION = 'daily-plate-v1.2-20260714';
+const CACHE_VERSION = 'daily-plate-v1.5-20260715';
 const ASSETS = [
   './',
   './index.html',
@@ -9,7 +9,9 @@ const ASSETS = [
   './app.js',
   './ingredients.js',
   './enhancements.js',
-  './v12.js',
+  './v13.js',
+  './v14.js',
+  './v15.js',
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
