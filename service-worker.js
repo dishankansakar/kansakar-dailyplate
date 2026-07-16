@@ -1,52 +1,5 @@
-// ── Daily Plate Service Worker ──────────────────────────────────────────────
-// CACHE_VERSION is updated on every build so the browser installs fresh SW.
-// Strategy: network-first (always get latest when online, cache as fallback).
-const CACHE_VERSION = 'daily-plate-v1.5-20260715';
-const ASSETS = [
-  './',
-  './index.html',
-  './style.css',
-  './app.js',
-  './ingredients.js',
-  './enhancements.js',
-  './v13.js',
-  './v14.js',
-  './v15.js',
-  './manifest.json',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
-];
-
-self.addEventListener('install', e => {
-  // Pre-cache on install, then take over immediately — don't wait for old tabs to close.
-  e.waitUntil(
-    caches.open(CACHE_VERSION).then(c => c.addAll(ASSETS))
-  );
-  self.skipWaiting();
-});
-
-self.addEventListener('activate', e => {
-  // Delete any old cache versions.
-  e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_VERSION).map(k => caches.delete(k)))
-    )
-  );
-  self.clients.claim();
-});
-
-self.addEventListener('fetch', e => {
-  if(e.request.method !== 'GET') return;
-  // Network-first: always try to get a fresh copy; cache is the offline fallback.
-  e.respondWith(
-    fetch(e.request)
-      .then(res => {
-        if(res.ok) {
-          const clone = res.clone();
-          caches.open(CACHE_VERSION).then(c => c.put(e.request, clone));
-        }
-        return res;
-      })
-      .catch(() => caches.match(e.request))
-  );
-});
+const CACHE_VERSION='daily-plate-v1.7-20260716';
+const CORE=['./','./index.html','./style.css','./app.js','./ingredients.js','./enhancements.js','./v13.js','./v14.js','./v17.js','./manifest.json','./icons/icon-192.png','./icons/icon-512.png','./icons/icon-maskable-192.png','./icons/icon-maskable-512.png'];
+self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE_VERSION).then(c=>Promise.all(CORE.map(u=>c.add(u).catch(()=>null)))));self.skipWaiting()});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_VERSION).map(k=>caches.delete(k)))));self.clients.claim()});
+self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;const u=new URL(e.request.url);if(u.origin!==self.location.origin)return;if(e.request.mode==='navigate'){e.respondWith(fetch(e.request).then(r=>{const x=r.clone();caches.open(CACHE_VERSION).then(c=>c.put('./index.html',x));return r}).catch(()=>caches.match('./index.html')));return}e.respondWith(caches.match(e.request).then(x=>x||fetch(e.request).then(r=>{if(r.ok){const y=r.clone();caches.open(CACHE_VERSION).then(c=>c.put(e.request,y))}return r}))) });
