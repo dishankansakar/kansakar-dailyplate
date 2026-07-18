@@ -468,3 +468,74 @@ button,input,select,textarea,label,
   background:linear-gradient(135deg,#d5e3d9 0%,#b9d0c0 100%) !important;
 }
 .overview-card .overview-cal{color:#111 !important;}
+/* Daily Plate v2.0 dashboard target cards */
+.home-target-pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:stretch}
+.home-half-card{height:252px;min-width:0;margin-bottom:14px;padding:14px 10px;overflow:hidden}
+.home-half-card h3{font-size:17px;text-align:center;margin:0 0 12px;white-space:nowrap}
+.calorie-average-card{display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+.average-calorie-value{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.average-calorie-value strong{font-family:'FS Silas Sans','Avenir Next',Avenir,'Segoe UI',Arial,sans-serif;font-size:37px;line-height:1;color:var(--ember)}
+.average-calorie-value span{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-top:7px;opacity:.62}
+.macro-targets-card{display:flex;flex-direction:column}
+.macro-swipe-viewport{width:100%;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:none;flex:1}
+.macro-swipe-viewport::-webkit-scrollbar{display:none}
+.macro-swipe-track{display:flex;width:300%;height:100%}
+.macro-swipe-slide{width:33.333333%;flex:0 0 33.333333%;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center}
+.macro-target-name{font-size:12px;font-weight:700;margin-bottom:7px}
+.macro-target-ring{--macro-percent:0;--macro-colour:#A7AEA9;width:94px;height:94px;border-radius:50%;display:grid;place-items:center;position:relative;background:conic-gradient(var(--macro-colour) calc(var(--macro-percent)*1%),rgba(27,43,34,.11) 0)}
+.macro-target-ring:before{content:'';position:absolute;width:70px;height:70px;border-radius:50%;background:var(--paper)}
+.macro-target-ring>div{position:relative;z-index:1}
+.macro-target-ring strong{font-family:'FS Silas Sans','Avenir Next',Avenir,'Segoe UI',Arial,sans-serif;font-size:20px}
+.macro-target-days{display:flex;flex-direction:column;margin-top:8px}
+.macro-target-days b{font-size:11px}
+.macro-target-days span{font-size:9px;text-transform:uppercase;letter-spacing:.05em;opacity:.55;margin-top:2px}
+.macro-page-dots{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:7px}
+.macro-page-dot{width:7px;height:7px;min-width:7px;padding:0;border:0;border-radius:50%;background:rgba(27,43,34,.22);cursor:pointer}
+.macro-page-dot.active{background:var(--ink);transform:scale(1.15)}
+@media(max-width:360px){.home-target-pair{gap:7px}.home-half-card{height:238px;padding:12px 7px}.home-half-card h3{font-size:12.5px}.average-calorie-value strong{font-size:31px}.macro-target-ring{width:84px;height:84px}.macro-target-ring:before{width:63px;height:63px}.macro-target-ring strong{font-size:18px}}
+/* Daily Plate v2.1 home card styling */
+.overview-card > h3,
+.home-half-card > h3{
+  color:var(--ink) !important;
+  -webkit-text-fill-color:var(--ink) !important;
+}
+.average-fire-icon{
+  width:60px;
+  height:60px;
+  color:var(--ember);
+  margin-bottom:10px;
+  flex:0 0 auto;
+}
+@media(max-width:360px){
+  .average-fire-icon{width:30px;height:30px;margin-bottom:8px;}
+}
+/* Daily Plate v2.2 visual and profile refinements */
+.overview-card,
+#screen-today > .card:first-of-type{
+  background:linear-gradient(135deg,#ffffff 0%,#f1f8f3 28%,#d3e7da 68%,#a7c8b2 100%) !important;
+}
+.profile-edit-toggle{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:0;
+  border:0;
+  background:transparent;
+  color:var(--ink);
+  font-family:'FS Silas Sans','Avenir Next',Avenir,'Segoe UI',Arial,sans-serif;
+  font-size:17px;
+  font-weight:700;
+  text-align:left;
+  cursor:pointer;
+}
+.profile-edit-chevron{
+  width:21px;
+  height:21px;
+  flex:0 0 21px;
+  transition:transform .2s ease;
+}
+.profile-edit-open .profile-edit-chevron{transform:rotate(180deg)}
+.profile-edit-body{padding-top:7px}
+.profile-edit-body[hidden]{display:none !important}
