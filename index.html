@@ -61,13 +61,13 @@
 
   <!-- ===================== HOME ===================== -->
   <div class="screen" id="screen-home">
-    <div class="page-brand-row"><h1 class="page-brand">Daily Plate</h1></div>
+    <div class="page-brand-row"><h1 class="page-brand">DAILY PLATE</h1></div>
     <div class="home-greeting" id="home-greeting">Hello</div>
     <div id="home-dashboard"></div>
   </div>
   <!-- ===================== TODAY ===================== -->
   <div class="screen" id="screen-today">
-    <div class="page-brand-row"><h1 class="page-brand">Daily Plate</h1></div>
+    <div class="page-brand-row"><h1 class="page-brand">DAILY PLATE</h1></div>
     <div class="topbar">
       <div>
         <div class="eyebrow" id="today-date">TODAY</div>
@@ -105,7 +105,7 @@
 
   <!-- ===================== LOG / HISTORY ===================== -->
   <div class="screen" id="screen-log">
-    <div class="page-brand-row"><h1 class="page-brand">Daily Plate</h1></div>
+    <div class="page-brand-row"><h1 class="page-brand">DAILY PLATE</h1></div>
     <div class="topbar"><div><div class="eyebrow">History</div><h1>Your history</h1></div></div>
     <div class="day-strip" id="day-strip"></div>
     <div class="log-day-header">
@@ -120,7 +120,7 @@
 
   <!-- ===================== INGREDIENTS ===================== -->
   <div class="screen" id="screen-ingredients">
-    <div class="page-brand-row"><h1 class="page-brand">Daily Plate</h1><button class="add-btn page-add-btn" onclick="openIngredientEditor(null)" aria-label="Add ingredient">+</button></div>
+    <div class="page-brand-row"><h1 class="page-brand">DAILY PLATE</h1><button class="add-btn page-add-btn" onclick="openIngredientEditor(null)" aria-label="Add ingredient">+</button></div>
     <div class="topbar">
       <div><div class="eyebrow">Database</div><h1>Ingredients</h1></div>
       <button class="add-btn" onclick="openIngredientEditor(null)">+</button>
@@ -133,7 +133,7 @@
 
   <!-- ===================== PROFILE ===================== -->
   <div class="screen" id="screen-profile">
-    <div class="page-brand-row"><h1 class="page-brand">Daily Plate</h1></div>
+    <div class="page-brand-row"><h1 class="page-brand">DAILY PLATE</h1></div>
     <div class="topbar"><div><div class="eyebrow">You</div><h1 id="profile-name">Profile</h1></div></div>
     <div class="card">
       <div class="stat-grid">
@@ -299,12 +299,14 @@
         <div><label>Calories (kcal)</label><input id="ie-cal" type="number" inputmode="decimal" oninput="v17SyncIngredientEnergy('kcal')"></div>
         <div><label>Energy (kJ, optional)</label><input id="ie-kj" type="number" inputmode="decimal" oninput="v17SyncIngredientEnergy('kj')"></div>
       </div>
-      <label>Protein (g)</label><input id="ie-protein" type="number">
       <div class="row2">
+        <div><label>Protein (g)</label><input id="ie-protein" type="number"></div>
         <div><label>Carbs (g)</label><input id="ie-carb" type="number"></div>
-        <div><label>Fat (g)</label><input id="ie-fat" type="number"></div>
       </div>
-      <label>Sugar (g)</label><input id="ie-sugar" type="number">
+      <div class="row2">
+        <div><label>Fat (g)</label><input id="ie-fat" type="number"></div>
+        <div><label>Sugar (g)</label><input id="ie-sugar" type="number"></div>
+      </div>
       <input id="ie-fiber" type="hidden" value="0">
       <input id="ie-sodium" type="hidden" value="0">
       <div class="default-serving-row">

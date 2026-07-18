@@ -421,3 +421,50 @@ button,input,select,textarea,label,
 #screen-today>.card:first-of-type{padding:13px;margin-bottom:11px}#screen-today .plate-wrap{padding:2px 0}#screen-today .plate-ring{width:165px;height:165px}#screen-today .plate-center .eaten-num{font-size:35px}#screen-today .plate-center .remaining-sub{font-size:12px}#screen-today .plate-center .sub{font-size:9px}#screen-today .plate-center .eaten-lbl,#screen-today .plate-center .eaten-unit{font-size:8px}#screen-today .macro-row{margin-top:10px;gap:7px;width:100%}#screen-today .macro-pill.macro-capsule{border-radius:999px;padding:8px 5px}#screen-today .macro-capsule .v{font-size:14px}#screen-today .macro-capsule .k{font-size:8px}#screen-today .macro-capsule .bar{height:3px;margin:4px 7px 0}#screen-today .macro-capsule .pill-target{font-size:8px;margin-top:3px}
 .month-calendar-wrap{display:block;overflow:visible;padding:5px 0 9px}.month-nav{display:grid;grid-template-columns:38px 1fr 38px;align-items:center;margin-bottom:10px}.month-nav strong{text-align:center;font-size:17px}.month-nav button{border:0;background:var(--paper-2);color:var(--ink);border-radius:50%;width:34px;height:34px;font-size:25px;line-height:1;cursor:pointer}.month-weekdays,.month-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.month-weekdays span{text-align:center;font-size:9px;font-weight:700;opacity:.45;text-transform:uppercase;padding-bottom:3px}.month-day{position:relative;aspect-ratio:1/1;border:0;border-radius:12px;background:var(--paper-2);color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;font-size:12px;cursor:pointer}.month-day.blank{background:transparent}.month-day.today{box-shadow:0 0 0 1.5px var(--ember) inset}.month-day.tomorrow{box-shadow:0 0 0 1.5px var(--sage) inset}.month-day.active{background:var(--ink);color:var(--paper);box-shadow:none}.month-day.disabled{opacity:.22;cursor:default}.log-dot{width:4px;height:4px;border-radius:50%;background:var(--ember);position:absolute;bottom:5px}.month-day.active .log-dot{background:var(--paper)}
 .serving-fields{display:flex;flex-direction:column;gap:7px;min-width:132px}.serving-label-input{width:132px!important;padding:8px 9px!important;font-size:12px!important}.energy-editor-row{align-items:flex-end}.serving-label-info{background:var(--sage-dim);border-radius:13px;padding:10px 12px;margin:8px 0 4px;display:flex;flex-direction:column;gap:2px}.serving-label-info b{font-size:11px;text-transform:uppercase;opacity:.55}.serving-label-info span{font-size:14px;font-weight:700}.serving-label-info small{font-size:10px;opacity:.55}
+/* Daily Plate v1.8: fixed compact title and calendar */
+.page-brand-row{
+  position:sticky !important;
+  top:0;
+  z-index:65;
+  margin:-20px -18px 18px !important;
+  padding:calc(14px + env(safe-area-inset-top)) 20px 12px !important;
+  background:rgba(246,243,236,.97);
+  border-bottom:1px solid rgba(27,43,34,.10);
+  box-shadow:0 5px 16px rgba(27,43,34,.07);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+.page-brand{font-size:21px !important;}
+.page-add-btn{width:32px;height:32px;flex-basis:32px;font-size:20px;}
+.month-weekdays,.month-grid{gap:4.25px !important;}
+.month-day{
+  width:85%;
+  justify-self:center;
+  border-radius:10px !important;
+  font-size:10.2px !important;
+}
+.month-weekdays span{font-size:8px !important;}
+.log-dot{width:3.4px !important;height:3.4px !important;bottom:4px !important;}
+/* Daily Plate v1.9 */
+.page-brand-row{
+  position:sticky !important;
+  top:0;
+  z-index:65;
+  margin:-20px -18px 18px !important;
+  padding:calc(14px + env(safe-area-inset-top)) 20px 12px !important;
+  background:var(--paper) !important;
+  border:0 !important;
+  border-bottom:0 !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+.page-brand{
+  font-size:17px !important;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.overview-card{
+  background:linear-gradient(135deg,#d5e3d9 0%,#b9d0c0 100%) !important;
+}
+.overview-card .overview-cal{color:#111 !important;}

@@ -1,4 +1,4 @@
-const CACHE_VERSION='daily-plate-v1.7-20260716';
+const CACHE_VERSION='daily-plate-v1.9-20260718';
 const CORE=['./','./index.html','./style.css','./app.js','./ingredients.js','./enhancements.js','./v13.js','./v14.js','./v17.js','./manifest.json','./icons/icon-192.png','./icons/icon-512.png','./icons/icon-maskable-192.png','./icons/icon-maskable-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE_VERSION).then(c=>Promise.all(CORE.map(u=>c.add(u).catch(()=>null)))));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_VERSION).map(k=>caches.delete(k)))));self.clients.claim()});
