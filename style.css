@@ -539,3 +539,35 @@ button,input,select,textarea,label,
 .profile-edit-open .profile-edit-chevron{transform:rotate(180deg)}
 .profile-edit-body{padding-top:7px}
 .profile-edit-body[hidden]{display:none !important}
+/* Daily Plate v2.4 */
+#sheet-ing-edit{align-items:flex-start;padding-top:env(safe-area-inset-top);}
+#sheet-ing-edit .sheet{
+  border-radius:0 0 22px 22px;
+  height:calc(100dvh - env(safe-area-inset-top));
+  max-height:calc(100dvh - env(safe-area-inset-top)) !important;
+  padding-top:14px;
+  overscroll-behavior:contain;
+  scroll-padding-top:72px;
+  scroll-padding-bottom:45vh;
+}
+#sheet-ing-edit .sheet-handle{display:none;}
+#sheet-ing-edit input:focus,#sheet-ing-edit select:focus{scroll-margin-top:80px;scroll-margin-bottom:45vh;}
+.diet-guru-card{background:linear-gradient(145deg,#1b2b22 0%,#2f5741 58%,#7fa37e 130%);color:#fff;border:0;overflow:hidden;position:relative;padding:19px;}
+.diet-guru-card:after{content:'';position:absolute;width:130px;height:130px;border-radius:50%;right:-48px;top:-58px;background:rgba(255,255,255,.08);}
+.guru-heading{display:flex;align-items:center;gap:12px;position:relative;z-index:1;}
+.guru-heading h3{margin:0;color:#fff!important;-webkit-text-fill-color:#fff!important;font-size:18px;}
+.guru-kicker{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.1em;opacity:.65;margin-top:2px;}
+.guru-main-icon{width:42px;height:42px;border-radius:13px;background:rgba(255,255,255,.14);display:grid;place-items:center;flex:0 0 42px;}
+.guru-main-icon svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.guru-message{font-size:14px;line-height:1.5;margin:17px 0 15px;position:relative;z-index:1;}
+.guru-message strong{color:#d9f1df;}
+.guru-stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;position:relative;z-index:1;}
+.guru-stats>div{background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.1);border-radius:13px;padding:10px 11px;}
+.guru-stats b{display:block;font-size:14px;}
+.guru-stats span,.guru-meta{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.06em;opacity:.65;margin-top:3px;}
+.guru-meta{position:relative;z-index:1;margin-top:12px;}
+
+/* Daily Plate v2.5 - darker Home Calorie Count gradient */
+.overview-card{
+  background:linear-gradient(135deg,#ffffff 0%,#c1c6c2 28%,#a9b9ae 68%,#869f8e 100%) !important;
+}
